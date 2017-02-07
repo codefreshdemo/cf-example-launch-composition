@@ -12,7 +12,7 @@ steps:
 
   launch_composition:
     title: Launch Composition
-    type: launch_composition
+    type: launch-composition
     composition: docker-compose.yml
     environment_name: 'cf-example-launch-composition'
     entry_point: app
