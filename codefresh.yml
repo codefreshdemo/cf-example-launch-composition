@@ -1,0 +1,18 @@
+version: '1.0'
+
+steps:
+
+  build_image:
+    title: Building Image
+    type: build
+    #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
+    image_name: codefresh/example-launch-compose
+    #Dockerfile location should be relative to the working directory
+    dockerfile: Dockerfile
+
+  launch_composition:
+    title: Launch Composition
+    type: launch-composition
+    composition: docker-compose.yml
+    environment_name: 'cf-example-launch-composition'
+    entry_point: app
