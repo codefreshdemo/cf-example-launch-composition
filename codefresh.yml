@@ -1,23 +1,36 @@
 version: '1.0'
-
+stages:
+  - prepare
+  - package
+  - launch
 steps:
-
-  build_image:
-    title: Building Image
-    type: build
-    #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
-    image_name: codefresh/example-launch-compose
-    #Dockerfile location should be relative to the working directory
-    dockerfile: Dockerfile
-
-  launch_composition:
-    title: Launch Composition
-    type: launch-composition
-    composition: docker-compose.yml
-    environment_name: 'cf-example-launch-composition'
-    entry_point: app
-    fail_fast: false
-    when:
-      branch:
-        only:
-          - master
+    main_clone:
+      title: 'Cloning main repository...'
+      type: git-clone
+      repo: codefreshdemo/cf-example-launch-composition
+      revision: 'master'
+      git: github
+      stage: prepare
+    build_image:
+      title: Building Image
+      type: build
+      #Important: rename this image to to a valid repository in your registry. For example: myUserName/vote
+      image_name: example-launch-compose
+      #Dockerfile location should be relative to the working directory
+      dockerfile: Dockerfile
+      tag: master
+      stage: package
+    launch_composition:
+      title: Launch Composition
+      type: launch-composition
+      composition:
+        version: '2'
+        services:
+          app:
+            image: example-launch-compose:master
+            ports:
+            - 3000
+      environment_name: 'cf-example-launch-composition'
+      entry_point: app
+      fail_fast: false
+      stage: launch 
